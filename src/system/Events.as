@@ -1,4 +1,4 @@
-package system {
+﻿package system {
 	
 	/**
 	 * ...
@@ -22,7 +22,7 @@ package system {
 				Core.btn.button(2, "Combat", 003);
 				Core.btn.button(3, "Dungeon", 0);
 				Core.btn.button(4, "Free-roam", 0);
-				Core.btn.button(5, "Town", 0);
+				Core.btn.button(5, "Town", 4);
 			}
 			if (id == 002) {
 				Core.text.mainText("You have loaded the pre-set character profile, Caetus.\r", true);
@@ -37,6 +37,9 @@ package system {
 					Core.screen.switchTo("Combat");
 					CombatAI.loadEncounter("Eidolon");
 				}
+			}
+			if (id == 004) {
+				Core.interpreter.interpret("tyrRuins.explore");
 			}
 			trace("eventID = " + eventID + "");
 		}

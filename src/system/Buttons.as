@@ -1,4 +1,4 @@
-package system {
+﻿package system {
 	import flash.events.MouseEvent;
 	import flash.display.MovieClip;
 	import system.*;
@@ -25,32 +25,60 @@ package system {
 			Core.screen.game["btn" + btnNum].text.text = label;
 			btnID[btnNum - 1] = eventID;
 		}
+		
+		// New version of button for intepreter, alows seting a custom callback.
+		public function setButton(btnNum:int, label:String):void  {
+			Core.screen.game["btn" + btnNum].visible = true;
+			Core.screen.game["btn" + btnNum].text.text = label;
+		}
+		
 		//Flush button data to prevent glitches and errors <designed by Void Director>
 		public function flushBtns():void {
-			for (var i:int = 0; i < 15; i += 1) {
+			for (var i:int = 0; i < 12; i += 1) {
 				//Default the button visibility to false
-				Core.screen.game["btn" + (i + 1)].visible = false;
+				hideButton(i)
 				//Flush the btnID array
 				btnID[i] = 0;
 			}
 		}
+		
+		public function hideButton(btnNumber): void {
+			Core.screen.game["btn" + (btnNumber + 1)].visible = false;
+		}
+		
+		// An array of callbacks (functions stored in variables) used to customize the effects of buttons
+		private var buttonEffects:Array = [];
+		
+		public function setButtonEvent(btnNum:int, callback:Function): void {
+			buttonEffects[btnNum] = callback;
+		}
+		
 		//Initialize the button array on Game screen
 		public function initBtn():void {
 			for (var i:int = 0; i < 12; i ++) {
 				var btnEventHandler:Function = onClick(i)
 				function onClick(btnNumber:int):Function {
 					return function(e:MouseEvent):void {
-						if (btnID[btnNumber] == 0) {
-							Core.text.mainText("No assignment.\r", false);
-							return;
+						if (buttonEffects[btnNumber]) {
+							buttonEffects[btnNumber](btnNumber);
+						} else {
+							defaultButtonEffect(btnNumber);
 						}
-						Core.event.eventID = btnID[btnNumber];
-						Core.event.testEngine(Core.event.eventID);
 					};
 				}
 				Core.screen.game["btn" + (i + 1)].addEventListener(MouseEvent.MOUSE_DOWN, btnEventHandler);
 			}
 		}
+		
+		private function defaultButtonEffect(btnNumber:int):void {
+			if (btnID[btnNumber] == 0) {
+				Core.text.mainText("No assignment.\r", false);
+				return;
+			}
+			Core.event.eventID = btnID[btnNumber];
+			Core.event.testEngine(Core.event.eventID);
+		}
+		
 		//Start a new game... be sure to flush previous data to avoid errors (data flush should be a separate function or however you know how to do it)
 		public function newGame(e:MouseEvent):void {
 			Core.screen.switchTo("Game");

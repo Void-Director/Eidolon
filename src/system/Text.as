@@ -1,4 +1,4 @@
-package system {
+﻿package system {
 	
 	/**
 	 * ...
@@ -10,6 +10,18 @@ package system {
 		
 		public function Text() {
 			//constructor code
+		}
+		
+		public function clearText ():void {
+			outputText = "";
+			Core.screen.game.text.htmlText = outputText;
+			Core.screen.game.scrollBar1.update();
+		}
+		
+		public function addText (text:String):void {
+			outputText = outputText + text;
+			Core.screen.game.text.htmlText = outputText;
+			Core.screen.game.scrollBar1.update()
 		}
 		//This is the function for the text display on the Game screen
 		public function mainText(text:String, reset:Boolean):void {
