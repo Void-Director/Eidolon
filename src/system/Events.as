@@ -51,8 +51,8 @@
 			}
 			if (id == 005) {
 				testEngine(001);
-				Core.text.mainText("\rLoaded Ceatus profile.", false);
-				Core.pc.loadCeatus();
+				Core.text.mainText("\rLoaded Baldr profile.", false);
+				Core.pc.loadBaldr();
 				Core.screen.game.refreshUI();
 			}
 			if (id == 006) {
