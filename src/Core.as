@@ -31,11 +31,13 @@
 	* 
 	*/
 	public class Core extends Sprite {
+		public static var interpreter:Interpreter = new Interpreter();
 		public static var btn:Buttons = new Buttons();
 		public static var combat:Combat = new Combat();
 		public static var credit:Credits = new Credits();
 		public static var event:Events = new Events;
 		public static var flag:Flags = new Flags();
+		public static var flags = {};
 		public static var game:Game = new Game();
 		public static var main:MainMenu = new MainMenu();
 		public static var option:Options = new Options();
