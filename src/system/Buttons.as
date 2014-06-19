@@ -91,7 +91,8 @@
 		//Go to Game screen
 		public function toGame(e:MouseEvent):void {
 			Core.screen.switchTo("Game");
-			Core.event.testEngine(001);
+			Core.event.testEngine(Core.event.eventID);
+			Core.screen.game.refreshUI();
 			trace("eventID = " +Core.event.eventID+"");
 		}
 		//Go to the Main menu
@@ -113,17 +114,16 @@
 		//Attack a target
 		public function attack(e:MouseEvent):void {
 			//If there are multiple targets, switch on the ability to select a target
-			if (CombatAI.e2.active) {
+			if (BattleSys.getActiveMembers(BattleSys.enemyTeam).length > 1) {
 				Core.text.fightText("Who do wish to target?", true);
-				Core.screen.combat.e1Target.addEventListener(MouseEvent.MOUSE_DOWN, pickTarget);
-				Core.screen.combat.e2Target.addEventListener(MouseEvent.MOUSE_DOWN, pickTarget);
-				if (CombatAI.e3.active) {
-					Core.screen.combat.e3Target.addEventListener(MouseEvent.MOUSE_DOWN, pickTarget);
+				for (var i:int =1; i < 4; i += 1) {
+					Core.screen.combat["e" + i + "Target"].addEventListener(MouseEvent.MOUSE_DOWN, pickTarget);
 				}
+				
 			}
 			//if single enemy, automatically target and attack
 			else {
-				CombatAI.pc.manualAttack(CombatAI.e1);
+				BattleSys.playerTeam[0].manualAttack(BattleSys.enemyTeam[0]);
 			}
 		}
 		

@@ -1,7 +1,7 @@
 ﻿package system {
-	import flash.events.ActivityEvent;
-	import templates.*;
 	import encounter.*;
+	import mx.utils.*;
+	import templates.*;
 	
 	/**
 	 * ...
@@ -9,12 +9,14 @@
 	 * @author Void Director
 	 */
 	
-	public class CombatAI	{
+	public class BattleSys	{
 		public static var playerTeam = [ new Entity, new Entity, new Entity];
 		public static var enemyTeam = [ new Entity, new Entity, new Entity];
-		private static var turnOrder:Array = new Array();
+		public static var turnOrder:Array = new Array();
+		public static var defaultTxt:String = "You are fighting {0}.\r";
+		private static var parsedString:String = "";
 		
-		public function CombatAI() {
+		public function BattleSys() {
 			//constructor code
 		}
 		
@@ -24,14 +26,15 @@
 			switch(id) {
 				case "Eidolon":
 					Eidolon.loadEidolon();
-					Eidolon.flavorText(001);
+					var parsedString = StringUtil.substitute(defaultTxt, "Eidolon"); 
+					Core.text.flavText(parsedString, true);
 				break;
 			}
 			id = "";
 			Core.screen.combat.startFight();
 			setTurns();
 		}
-		//Pushes entity objects in turn array if there is data in them
+		//Pushes entity objects into turn array if there is data in them
 		private static function setTurns():void {
 			// Gets all the active members of the teams then adds them to the turnOrder array.
 			trace (turnOrder)
@@ -61,30 +64,19 @@
 			}
 			trace(turnOrder);
 		}
-		//Kill the target and remove them from turn order... unless PC, then end the encounter
-		public static function killPC():void {
-			Core.text.fightText("You fall to your knees, defeated", true);
+		//Kill the target and remove them from turn order
+		public static function killTarget():void {
+			
 		}
-		//Remove enemy from turn array if HP has been reduced to 0
-		//public static function killEnemy():void {
-			//var enemy:Entity;
-			//for (var i:int = 1; i < 4; i += 1) {
-				//enemy = this["enemy" + i];
-				//if (enemy.HP <= 0) {
-					//this.turnOrder.splice(this.turnOrder.indexOf(enemy));
-				//}
-			//}
-		//}
-		//Remove companion from turn array if HP has been reduced to 0
-		//private function companionKill():void {
-			//var companion:Entity;
-			//for (var i:int = 1; i < 4; i += 1) {
-				//companion = this["companion" + i];
-				//if (companion.HP <= 0) {
-					//this.turnOrder.splice(this.turnOrder.indexOf(companion));
-				//}
-			//}
-		//}
+		//End combat... only if all enemies are killed or PC is killed
+		public static function endCombat():void {
+			Core.screen.combat.resume.visible = true;
+			//Disable combat buttons
+			Core.screen.combat.attack.mouseEnabled = false;
+			Core.screen.combat.skills.mouseEnabled = false;
+			Core.screen.combat.magic.mouseEnabled = false;
+			Core.screen.combat.flee.mouseEnabled = false;
+		}
 		
 	}
 	
